@@ -62,11 +62,19 @@ export class MyCodeActionProvider implements CodeActionProvider {
   ): CodeAction[] | Thenable<CodeAction[]> | undefined {
     var editor = window.activeTextEditor;
     if (!editor) return;
-    const maybeChars = workspace
-      .getConfiguration("toggleQuotesPlus", editor.document)
-      .get("chars");
-    const chars = Array.isArray(maybeChars) ? maybeChars : [];
-    return chars.map((char: string) => this.createFix(document, range, char));
+    for (const sel of editor.selections) {
+      const content = editor.document.lineAt(sel.start.line);
+      const charInfo = findChar(getChars(editor), content.text, sel);
+      if (charInfo) {
+        const maybeChars = workspace
+          .getConfiguration("toggleQuotesPlus", editor.document)
+          .get("chars");
+        const chars = Array.isArray(maybeChars) ? maybeChars : [];
+        return chars.map((char: string) =>
+          this.createFix(document, range, char)
+        );
+      }
+    }
   }
 
   private createFix(
