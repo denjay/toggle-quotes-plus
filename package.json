@@ -4,7 +4,7 @@
   "publisher": "denjay",
   "description": "Toggle cycle \" -> ' -> `",
   "icon": "assets/quotes.png",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.86.0"
   },
